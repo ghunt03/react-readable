@@ -20,7 +20,7 @@ class Categores extends Component {
           </li>
           {categories.map(category => (
             <li className="cat-filter" key={category.name}>
-              <Link to={category.path}>{capitalize(category.name)}</Link>
+              <Link to={`/${category.path}`}>{capitalize(category.name)}</Link>
             </li>
           ))}
         </ul>

@@ -7,9 +7,9 @@ export default function posts(state = {}, action) {
     case GET_POSTS:
       return {
         ...state,
-        ...posts.reduce((previous, current) => {
-          previous[current.id] = current
-          return previous
+        ...posts.reduce((obj, item) => {
+          obj[item.id] = item
+          return obj
         }, {})
       };
     case UPDATE_VOTE:

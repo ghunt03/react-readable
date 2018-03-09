@@ -1,24 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchAllPosts, postVote } from "../actions";
-import FaThumbsOUp from "react-icons/lib/fa/thumbs-o-up";
-import FaThumbsODown from "react-icons/lib/fa/thumbs-o-down";
+import { Link } from "react-router-dom";
+import { fetchAllPosts } from "../actions";
+import Voter from "./Voter";
 import {
   ListGroup,
   ListGroupItem,
   Container,
   Row,
-  Col,
-  Button
+  Col
 } from "reactstrap";
 class Posts extends Component {
   componentWillMount() {
     this.props.getAllPosts();
   }
-
-  updateVote = ({ id, option, type }) => {
-    this.props.vote({ id: id, option: option, type: type });
-  };
 
   render() {
     const { posts } = this.props;
@@ -36,38 +31,16 @@ class Posts extends Component {
             <Container>
               <Row>
                 <Col>
-                  <h4>{post.title}</h4>
+                  <h4>
+                    <Link to={`/post/${post.id}`}>{post.title}</Link>
+                  </h4>
                 </Col>
               </Row>
               <Row>
                 <Col xs="3">by {post.author}</Col>
                 <Col xs="3">Comments: {post.commentCount}</Col>
                 <Col xs="3">
-                  Vote Score: {post.voteScore}
-                  <Button
-                    color="link"
-                    onClick={() =>
-                      this.updateVote({
-                        id: post.id,
-                        option: "upVote",
-                        type: "post"
-                      })
-                    }
-                  >
-                    <FaThumbsOUp />
-                  </Button>
-                  <Button
-                    color="link"
-                    onClick={() =>
-                      this.updateVote({
-                        id: post.id,
-                        option: "downVote",
-                        type: "post"
-                      })
-                    }
-                  >
-                    <FaThumbsODown />
-                  </Button>
+                  <Voter score={post.voteScore} id={post.id} type="post"/>
                 </Col>
               </Row>
             </Container>
@@ -79,12 +52,10 @@ class Posts extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { posts } = state;
-  return { posts: Object.values(posts) };
+  return { posts: Object.values(state.posts) };
 };
 
 const mapDispatchToProps = dispatch => ({
-  getAllPosts: data => dispatch(fetchAllPosts()),
-  vote: data => dispatch(postVote(data))
+  getAllPosts: data => dispatch(fetchAllPosts())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);
