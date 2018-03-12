@@ -25,7 +25,6 @@ export const updateVote = (id, option, type) => {
   const data = { option };
   const apiUrl =
     type === "post" ? `${apiHost}posts/${id}` : `${apiHost}comments/${id}`;
-
   return fetch(apiUrl, {
     method: "POST",
     body: JSON.stringify(data),
@@ -40,8 +39,7 @@ export const getComments = postId =>
     res.json()
   );
 
-export const postComment = (data) => {
-  console.log(data);
+export const postComment = data => {
   return fetch(`${apiHost}comments`, {
     method: "POST",
     body: JSON.stringify(data),
@@ -50,6 +48,25 @@ export const postComment = (data) => {
     .then(res => res.json())
     .then(data => data);
 };
+
+export const updateComment = data => {
+  return fetch(`${apiHost}comments/${data.id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers
+  })
+    .then(res => res.json())
+    .then(data => data);
+}
+
+export const deleteComment = id => {
+  return fetch(`${apiHost}comments/${id}`, {
+    method: "DELETE",
+    headers
+  })
+    .then(res => res.json())
+    .then(data => data);
+}
 
 //   id - Any unique ID. As with posts, UUID is probably the best here.
 // timestamp - [Timestamp] Get this however you want.

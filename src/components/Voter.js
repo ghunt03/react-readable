@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { postVote } from "../actions";
 import FaThumbsOUp from "react-icons/lib/fa/thumbs-o-up";
 import FaThumbsODown from "react-icons/lib/fa/thumbs-o-down";
-import { Button } from "reactstrap";
+import { Button, ButtonGroup } from "reactstrap";
 
 class Voter extends Component {
   static propTypes = {
@@ -22,18 +22,18 @@ class Voter extends Component {
   };
 
   render() {
-    console.log(this.props);
     const { score } = this.props;
-
     return (
       <div>
         Vote Score: {score}
-        <Button color="link" onClick={() => this.updateVote("upVote")}>
-          <FaThumbsOUp />
-        </Button>
-        <Button color="link" onClick={() => this.updateVote("downVote")}>
-          <FaThumbsODown />
-        </Button>
+        <ButtonGroup>
+          <Button color="link" onClick={() => this.updateVote("upVote")}>
+            <FaThumbsOUp />
+          </Button>
+          <Button color="link" onClick={() => this.updateVote("downVote")}>
+            <FaThumbsODown />
+          </Button>
+        </ButtonGroup>
       </div>
     );
   }

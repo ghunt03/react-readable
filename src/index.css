@@ -6,9 +6,9 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 1070px;
+  
   padding: 20px;
-  min-width: 1070px;
+  
 }
 
 .header {
@@ -21,6 +21,22 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.comment-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author {
+  color: #dddddd;
 }
 
 .icon-btn {

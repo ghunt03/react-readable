@@ -1,36 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchComments, postComment } from "../actions";
+import { fetchComments, deleteComment } from "../actions";
 import Voter from "./Voter";
-import uuid from "uuid";
-import {
-  ListGroup,
-  ListGroupItem,
-  Form,
-  Input,
-  Button,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
+import Author from "./Author";
+import CommentForm from "./CommentForm";
+import { FaEdit, FaPlus, FaClose } from "react-icons/lib/fa";
+import { ListGroup, ListGroupItem, Button, ButtonGroup } from "reactstrap";
+
 class Comments extends Component {
   state = {
-    author: "",
-    body: ""
+    commentModal: false,
+    commentId: "0"
   };
 
   constructor(props) {
     super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
+  toggleModal() {
     this.setState({
-      [name]: value
+      commentModal: !this.state.commentModal,
+      commentId: "0"
     });
   }
 
@@ -39,61 +30,58 @@ class Comments extends Component {
     this.props.getComments(id);
   }
 
-  publishComment = e => {
-    console.log(this.state);
+  editComment = id => {
+    this.setState({
+      commentId: id,
+      commentModal: true
+    });
+  };
 
-    const comment = {
-      id: uuid(),
-      timestamp: Date.now(),
-      body: this.state.body,
-      author: this.state.author,
-      parentId: this.props.id
-    };
-    console.log(comment);
-    this.props.addComment(comment);
+  deleteComment = id => {
+    this.props.removeComment(id);
   };
 
   render() {
-    const { comments } = this.props;
+    const { comments, id } = this.props;
     return (
       <div>
-        <Form>
-          <Container className="commentBox">
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="author"
-                  id="exampleText"
-                  placeholder="Your Name"
-                  value={this.state.author}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Input
-                  type="textarea"
-                  name="body"
-                  id="exampleText"
-                  placeholder="Write a response"
-                  value={this.state.body}
-                  onChange={this.handleInputChange}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Button onClick={this.publishComment}>Publish</Button>
-              </Col>
-            </Row>
-          </Container>
-        </Form>
-        <br />
+        <CommentForm
+          modalIsOpen={this.state.commentModal}
+          parentId={id}
+          commentId={this.state.commentId}
+          onToggleModal={this.toggleModal}
+        />
+        <div className="nav">
+          <h5>Comments ({comments.length})</h5>
+          <Button color="link" onClick={this.toggleModal}>
+            <FaPlus /> Add Comment
+          </Button>
+        </div>
         <ListGroup>
           {comments.map(comment => (
-            <ListGroupItem key={comment.id}>{comment.body}</ListGroupItem>
+            <ListGroupItem key={comment.id}>
+              <div className="comment-banner">
+                <Author author={comment.author} />
+                <div>
+                  <ButtonGroup>
+                    <Button
+                      color="link"
+                      onClick={() => this.editComment(comment.id)}
+                    >
+                      <FaEdit /> Edit
+                    </Button>
+                    <Button
+                      color="link"
+                      onClick={() => this.deleteComment(comment.id)}
+                    >
+                      <FaClose /> Remove
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </div>
+              {comment.body}
+              <Voter score={comment.voteScore} id={comment.id} type="comment" />
+            </ListGroupItem>
           ))}
         </ListGroup>
       </div>
@@ -107,7 +95,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   getComments: data => dispatch(fetchComments(data)),
-  addComment: data => dispatch(postComment(data))
+  removeComment: id => dispatch(deleteComment(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);
