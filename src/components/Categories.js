@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { fetchCategories } from "../actions";
 import { Link } from "react-router-dom";
 import { capitalize } from "../utils/helpers";
-
 class Categores extends Component {
   componentWillMount() {
     this.props.getCategories();
@@ -11,12 +10,11 @@ class Categores extends Component {
 
   render() {
     const { categories } = this.props;
-    console.log(categories, "cats");
     return (
       <div className="category-list">
         <ul>
           <li>
-            <Link to="/">All Categores</Link>
+            <Link to="/">All Categories</Link>
           </li>
           {categories.map(category => (
             <li className="cat-filter" key={category.name}>

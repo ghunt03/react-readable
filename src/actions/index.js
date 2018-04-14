@@ -9,6 +9,10 @@ export const EDIT_COMMENT = "EDIT_COMMENT";
 export const REMOVE_COMMENT = "REMOVE_COMMENT";
 export const UPDATE_COMMENT_VOTE = "UPDATE_COMMENT_VOTE";
 
+export const ADD_POST = "ADD_POST";
+export const EDIT_POST = "EDIT_POST";
+
+
 // fetch categories
 export const fetchCategories = () => dispatch =>
   ReadableAPI.getCategories().then(data => dispatch(getCategories(data)));
@@ -82,4 +86,22 @@ export const deleteComment = id => dispatch =>
 export const removeComment = id => ({
   type: REMOVE_COMMENT,
   id
+});
+
+
+
+export const postPost = data => dispatch =>
+  ReadableAPI.postPost(data).then(data => dispatch(addPost(data)));
+
+export const addPost = post => ({
+  type: ADD_POST,
+  post
+});
+
+export const updatePost = data => dispatch =>
+  ReadableAPI.postPost(data).then(data => dispatch(editPost(data)));
+
+export const editPost = post => ({
+  type: EDIT_POST,
+  post
 });

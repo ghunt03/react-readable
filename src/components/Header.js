@@ -21,8 +21,9 @@ class Header extends Component {
       <div>
         <div className="nav">
           <h1 className="header">Readable</h1>
+          <Categories />
         </div>
-        <Categories />
+        
       </div>
     );
   }
