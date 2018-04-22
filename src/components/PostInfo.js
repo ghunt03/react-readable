@@ -4,9 +4,7 @@ import {
   ListGroupItem,
   Container,
   Row,
-  Col,
-  Button,
-  Input
+  Col
 } from "reactstrap";
 import Voter from "./Voter";
 

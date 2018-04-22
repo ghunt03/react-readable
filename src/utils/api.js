@@ -89,3 +89,13 @@ export const updatePost = data => {
     .then(res => res.json())
     .then(data => data);
 };
+
+
+export const deletePost = id => {
+  return fetch(`${apiHost}posts/${id}`, {
+    method: "DELETE",
+    headers
+  })
+    .then(res => res.json())
+    .then(data => data);
+};

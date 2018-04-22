@@ -1,5 +1,5 @@
 import { UPDATE_VOTE } from "../actions/Voter";
-import { GET_POSTS, ADD_POST, EDIT_POST } from "../actions/Posts";
+import { GET_POSTS, ADD_POST, EDIT_POST, DELETE_POST } from "../actions/Posts";
 
 export default function posts(state = {}, action) {
   const { id, posts, post } = action;
@@ -32,6 +32,11 @@ export default function posts(state = {}, action) {
         [id]: {
           ...post
         }
+      };
+    case DELETE_POST:
+      delete state[id];
+      return {
+        ...state
       };
     default:
       return state;

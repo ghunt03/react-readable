@@ -1,23 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Alert, Button, ButtonGroup } from "reactstrap";
+
+import { deletePost } from "../actions/Posts";
+
 import Comments from "./Comments";
 import { FaEdit, FaClose } from "react-icons/lib/fa";
 import Voter from "./Voter";
 import Author from "./Author";
 import PostForm from "./PostForm";
 
-
 class Post extends Component {
-
-  state = {
-    postModal: false,
-    postId: "0"
-  };
-
+  
   constructor(props) {
     super(props);
     this.toggleModal = this.toggleModal.bind(this);
+    this.state = {
+      postModal: false,
+      postId: "0"
+    };
   }
 
   toggleModal() {
@@ -27,7 +28,6 @@ class Post extends Component {
     });
   }
 
-
   editPost = id => {
     this.setState({
       postId: id,
@@ -36,7 +36,8 @@ class Post extends Component {
   };
 
   deletePost = id => {
-    //this.props.removeComment(id);
+    this.props.remove(id);
+    this.props.history.push('/');
   };
 
   render() {
@@ -45,14 +46,13 @@ class Post extends Component {
       return (
         <div>
           <div>
-          <PostForm
-          modalIsOpen={this.state.postModal}
-          postId={this.state.postId}
-          onToggleModal={this.toggleModal}
-        />
+            <PostForm
+              modalIsOpen={this.state.postModal}
+              postId={this.state.postId}
+              onToggleModal={this.toggleModal}
+            />
             <h3>{post.title}</h3>
 
-            
             <div className="post-banner">
               <Author author={post.author} />
               <Voter score={post.voteScore} id={post.id} type="post" />
@@ -72,7 +72,7 @@ class Post extends Component {
         </div>
       );
     } else {
-      return <Alert color="danger">Invalid Post ID</Alert>;
+      return <Alert color="danger">Post not found</Alert>;
     }
   }
 }
@@ -82,4 +82,8 @@ const mapStateToProps = (state, ownProps) => {
   return { post: state.posts[id] };
 };
 
-export default connect(mapStateToProps)(Post);
+const mapDispatchToProps = dispatch => ({
+  remove: id => dispatch(deletePost(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
