@@ -1,88 +1,150 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchAllPosts } from "../actions";
-import Voter from "./Voter";
+import { fetchAllPosts } from "../actions/Posts";
+import { compareValues } from "../utils/helpers";
+import PostInfo from "./PostInfo";
 import PostForm from "./PostForm";
-import { ListGroup, ListGroupItem, Container, Row, Col, Button } from "reactstrap";
+import {
+  Alert,
+  ListGroup,
+  Button,
+  Input,
+  Container,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Label
+} from "reactstrap";
 import { FaPlus } from "react-icons/lib/fa";
 class Posts extends Component {
-  state = {
-    postModal: false,
-    postId: "0"
-  };
-
   constructor(props) {
     super(props);
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
+
+    this.state = {
+      postModal: false,
+      sortBy: "voteScore",
+      sortOrder: "desc"
+    };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getAllPosts();
-    
   }
 
   toggleModal() {
     this.setState({
-      postModal: !this.state.postModal,
-      postId: "0"
+      postModal: !this.state.postModal
     });
   }
 
   openPostForm = () => {
-    this.toggleModal()
+    this.toggleModal();
+  };
+
+  handleSortChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+    this.getSortedPosts(this.props.posts);
   }
 
-  render() {
-    const { posts } = this.props;
-
+  getSortedPosts = posts => {
     const filteredPosts =
-      "category" in this.props.match.params
+      posts.length > 0 && "category" in this.props.match.params
         ? posts.filter(
             post => post.category === this.props.match.params.category
           )
         : posts;
-        console.log(posts);
+
+    if (filteredPosts.length > 1) {
+      const { sortBy, sortOrder } = this.state;
+      filteredPosts.sort(compareValues(sortBy, sortOrder));
+    }
+    return filteredPosts;
+  };
+
+  render() {
+    const { posts } = this.props;
+    const displayPosts = this.getSortedPosts(posts);
     return (
       <div>
-        <PostForm modalIsOpen={this.state.postModal}
-          postId={this.state.postId}
-          onToggleModal={this.toggleModal}/>
-        <div className="clearfix">
-          <Button color="link" className="float-right" onClick={this.openPostForm}>
-            <FaPlus /> Add Post
-          </Button>
+        <div>
+          <Container>
+            <Row>
+              <Col>
+                <Form inline>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="sortBy" className="mr-sm-2">
+                      Sort By
+                    </Label>
+                    <Input
+                      type="select"
+                      name="sortBy"
+                      id="sortBy"
+                      defaultValue={this.state.sortBy}
+                      onChange={this.handleSortChange}
+                    >
+                      <option value="voteScore">Votes</option>
+                      <option value="title">Title</option>
+                      <option value="timestamp">Timestamp</option>
+                    </Input>
+                  </FormGroup>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="sortOrder" className="mr-sm-2">
+                      Sort Order:
+                    </Label>
+                    <Input
+                      type="select"
+                      name="sortOrder"
+                      id="sortOrder"
+                      defaultValue={this.state.sortOrder}
+                      onChange={this.handleSortChange}
+                    >
+                      <option value="desc">Desc</option>
+                      <option value="asc">Asc</option>
+                    </Input>
+                  </FormGroup>
+                </Form>
+              </Col>
+              <Col>
+                <div className="float-right">
+                  <Button color="link" onClick={this.openPostForm}>
+                    <FaPlus /> Add Post
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          </Container>
         </div>
 
-        <ListGroup>
-          {filteredPosts.map(post => (
-            <ListGroupItem key={post.id}>
-              <Container>
-                <Row>
-                  <Col>
-                    <h4>
-                      <Link to={`/post/${post.id}`}>{post.title}</Link>
-                    </h4>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="3">by {post.author}</Col>
-                  <Col xs="3">Comments: {post.commentCount}</Col>
-                  <Col xs="3">
-                    <Voter score={post.voteScore} id={post.id} type="post" />
-                  </Col>
-                </Row>
-              </Container>
-            </ListGroupItem>
-          ))}
-        </ListGroup>
+        {displayPosts.length ? (
+          <ListGroup>
+            {displayPosts.map(post => <PostInfo post={post} key={post.id} />)}
+          </ListGroup>
+        ) : (
+          <Alert color="info">There are no articles in this category</Alert>
+        )}
+
+        <PostForm
+          modalIsOpen={this.state.postModal}
+          postId="0"
+          onToggleModal={this.toggleModal}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return { posts: Object.values(state.posts) };
+  return {
+    posts: Object.values(state.posts)
+  };
 };
 
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,5 @@
-import { GET_POSTS, UPDATE_VOTE, ADD_POST, EDIT_POST } from "../actions";
+import { UPDATE_VOTE } from "../actions/Voter";
+import { GET_POSTS, ADD_POST, EDIT_POST } from "../actions/Posts";
 
 export default function posts(state = {}, action) {
   const { id, posts, post } = action;

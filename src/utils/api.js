@@ -57,7 +57,7 @@ export const updateComment = data => {
   })
     .then(res => res.json())
     .then(data => data);
-}
+};
 
 export const deleteComment = id => {
   return fetch(`${apiHost}comments/${id}`, {
@@ -66,9 +66,11 @@ export const deleteComment = id => {
   })
     .then(res => res.json())
     .then(data => data);
-}
+};
 
-export const postPost= data => {
+
+
+export const postPost = data => {
   return fetch(`${apiHost}posts`, {
     method: "POST",
     body: JSON.stringify(data),
@@ -86,11 +88,4 @@ export const updatePost = data => {
   })
     .then(res => res.json())
     .then(data => data);
-}
-
-
-//   id - Any unique ID. As with posts, UUID is probably the best here.
-// timestamp - [Timestamp] Get this however you want.
-// body - [String]
-// author - [String]
-// parentId - Should match a post id in the database.
+};

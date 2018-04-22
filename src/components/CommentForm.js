@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import uuid from "uuid";
 import { connect } from "react-redux";
-import { postComment, updateComment } from "../actions";
+import { postComment, updateComment } from "../actions/Comments";
 
 import {
   Form,
+  FormGroup,
+  Label,
   Input,
   Button,
   Modal,
@@ -68,12 +70,11 @@ class CommentForm extends Component {
       parentId: this.state.parentId
     };
     if (this.state.isEditing) {
-        this.props.editComment(comment);
+      this.props.editComment(comment);
     } else {
-        this.props.addComment(comment);
+      this.props.addComment(comment);
     }
 
-    
     this.props.onToggleModal();
   };
 
@@ -81,25 +82,31 @@ class CommentForm extends Component {
     const { modalIsOpen, onToggleModal } = this.props;
     return (
       <Modal isOpen={modalIsOpen} toggle={onToggleModal}>
-        <ModalHeader toggle={onToggleModal}>Modal title</ModalHeader>
+        <ModalHeader toggle={onToggleModal}>Add / Update Comment</ModalHeader>
         <ModalBody>
           <Form>
-            <Input
-              type="text"
-              name="author"
-              id="exampleText"
-              placeholder="Your Name"
-              value={this.state.author}
-              onChange={this.handleInputChange}
-            />
-            <Input
-              type="textarea"
-              name="body"
-              id="exampleText"
-              placeholder="Write a response"
-              value={this.state.body}
-              onChange={this.handleInputChange}
-            />
+            <FormGroup>
+              <Label for="author">Your Name</Label>
+              <Input
+                type="text"
+                name="author"
+                id="author"
+                placeholder="Your Name"
+                value={this.state.author}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="comment">Comments</Label>
+              <Input
+                type="textarea"
+                name="body"
+                id="exampleText"
+                placeholder="Write a response"
+                value={this.state.body}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>

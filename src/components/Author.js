@@ -1,13 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import FaUser from "react-icons/lib/fa/user";
-class Author extends Component {
-  render() {
-    return (
-      <div>
-        <FaUser size={20} /> {this.props.author}
-      </div>
-    );
-  }
-}
+
+const Author = ({ author }) => (
+  <div>
+    <FaUser size={20} /> {author}
+  </div>
+);
 
 export default Author;

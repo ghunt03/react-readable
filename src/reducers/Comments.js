@@ -1,10 +1,10 @@
+import { UPDATE_COMMENT_VOTE } from "../actions/Voter";
 import {
   GET_COMMENTS,
   ADD_COMMENT,
-  UPDATE_COMMENT_VOTE,
   EDIT_COMMENT,
   REMOVE_COMMENT
-} from "../actions";
+} from "../actions/Comments";
 
 export default function comments(state = {}, action) {
   const { id, comments, comment } = action;

@@ -5,13 +5,34 @@ import Comments from "./Comments";
 import { FaEdit, FaClose } from "react-icons/lib/fa";
 import Voter from "./Voter";
 import Author from "./Author";
+import PostForm from "./PostForm";
+
 
 class Post extends Component {
+
+  state = {
+    postModal: false,
+    postId: "0"
+  };
+
+  constructor(props) {
+    super(props);
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      postModal: !this.state.postModal,
+      postId: "0"
+    });
+  }
+
+
   editPost = id => {
-    // this.setState({
-    //   commentId: id,
-    //   commentModal: true
-    // });
+    this.setState({
+      postId: id,
+      postModal: true
+    });
   };
 
   deletePost = id => {
@@ -24,7 +45,14 @@ class Post extends Component {
       return (
         <div>
           <div>
+          <PostForm
+          modalIsOpen={this.state.postModal}
+          postId={this.state.postId}
+          onToggleModal={this.toggleModal}
+        />
             <h3>{post.title}</h3>
+
+            
             <div className="post-banner">
               <Author author={post.author} />
               <Voter score={post.voteScore} id={post.id} type="post" />

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { postVote } from "../actions";
+import { postVote } from "../actions/Voter";
 import FaThumbsOUp from "react-icons/lib/fa/thumbs-o-up";
 import FaThumbsODown from "react-icons/lib/fa/thumbs-o-down";
 import { Button, ButtonGroup } from "reactstrap";
